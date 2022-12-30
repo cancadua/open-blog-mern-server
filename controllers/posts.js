@@ -25,7 +25,7 @@ exports.putPost = (req, res) => {
     const { title, content } = req.body
     const id = req.params.postId;
 
-    Post.findOneAndUpdate({_id: id}, {title: title, content: content, time: new Date()})
+    Post.findOneAndUpdate({_id: id}, {title: title, content: content, updated_on: new Date()})
         .then(data => res.send(data))
 }
 

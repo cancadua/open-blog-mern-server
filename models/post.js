@@ -4,6 +4,6 @@ module.exports = mongoose => mongoose.model(
         {
             title: {type: String},
             content: {type: String},
-            time: {type: Date, default: Date.now},
+            updated_on: {type: Date, default: Date.now},
         })
 );
