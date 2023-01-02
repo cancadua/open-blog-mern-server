@@ -14,19 +14,9 @@ exports.postComment = (req, res) => {
     })
 
     comment.save(comment)
-        .then(data => res.send(data))
+        .then(() => res.status(201).send("Created!"))
 };
 
-exports.putComment = (req, res) => {
-    const id = req.params.commentId;
-
-    Comment.findByIdAndUpdate(id, {
-        title: req.body.title,
-        content: req.body.content,
-        time: new Date()
-    })
-        .then(data => res.send(data))
-};
 
 exports.deletePostComments = (postId) => {
     Comment.deleteMany({ post_id: postId })
@@ -36,6 +26,14 @@ exports.deletePostComments = (postId) => {
 exports.deleteComment = (req, res) => {
     const id = req.params.commentId;
 
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+        return res.status(400).send("Wrong ID provided!");
+    }
+
     Comment.findOneAndRemove({_id: id})
-        .then(data => res.send(data))
+        .then(data => {
+            if (data) {
+                return res.send("Deleted!")
+            } else return res.status(404).send("Comment with provided ID doesn't exist!")
+        })
 }

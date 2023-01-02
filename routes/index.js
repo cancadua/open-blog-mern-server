@@ -13,9 +13,8 @@ module.exports = app => {
     router.delete("/posts/:postId", posts.deletePost);
 
     router.get('/posts/:postId/comments', comments.getComments);
-    router.post('/posts/:postId/comment', comments.postComment);
-    router.put('/posts/:postId/comment/:commentId', comments.putComment);
-    router.delete('/posts/:postId/comment/:commentId', comments.deleteComment);
+    router.post('/posts/:postId/comments', comments.postComment);
+    router.delete('/posts/comments/:commentId', comments.deleteComment);
 
     app.use('/api', cors(), router);
 };
