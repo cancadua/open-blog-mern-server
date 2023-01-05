@@ -14,7 +14,7 @@ exports.postComment = (req, res) => {
     })
 
     comment.save(comment)
-        .then(() => res.status(201).send("Created!"))
+        .then(() => res.status(201).send({message: "Created!"}))
 };
 
 
@@ -27,13 +27,13 @@ exports.deleteComment = (req, res) => {
     const id = req.params.commentId;
 
     if (!id.match(/^[0-9a-fA-F]{24}$/)) {
-        return res.status(400).send("Wrong ID provided!");
+        return res.status(400).send({message: "Wrong ID provided!"});
     }
 
     Comment.findOneAndRemove({_id: id})
         .then(data => {
             if (data) {
-                return res.send("Deleted!")
-            } else return res.status(404).send("Comment with provided ID doesn't exist!")
+                return res.send({message: "Deleted!"})
+            } else return res.status(404).send({message: "Comment with provided ID doesn't exist!"})
         })
 }
