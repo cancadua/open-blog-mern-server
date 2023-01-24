@@ -8,7 +8,6 @@ db.mongoose = mongoose;
 db.url = dbConfig.url;
 
 db.post = require("./post.js")(mongoose)
-
 db.comment = require("./comment.js")(mongoose);
 
 module.exports = db;

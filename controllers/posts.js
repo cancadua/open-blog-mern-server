@@ -6,6 +6,13 @@ exports.getAllPosts = (req, res) => {
         .then(data => res.send(data))
 }
 
+exports.getPostsByTag = (req, res) => {
+    const tag = req.params.tag;
+    Post.find({ "tags" : tag }).select('-__v')
+        .then(data => res.send(data))
+}
+
+
 exports.getPost = (req, res) => {
 
     const id = req.params.postId;
@@ -26,22 +33,23 @@ exports.getPost = (req, res) => {
 exports.postPost = (req, res) => {
     const post = new Post({
         title: req.body.title,
-        content: req.body.content
+        content: req.body.content,
+        tags: req.body.tags
     });
-
     post.save(post)
-        .then(() => res.status(201).send({message: "Created!"}))
+        .then(() => res.status(200).send({message: "Created!"}))
+        .catch(e => res.status(400).send())
 };
 
 exports.putPost = (req, res) => {
 
-    const { title, content } = req.body
+    const { title, content, tags } = req.body
     const id = req.params.postId;
     if (!id.match(/^[0-9a-fA-F]{24}$/)) {
         return res.status(400).send({message: "Wrong ID provided!"});
     }
 
-    Post.findOneAndUpdate({_id: id}, {title: title, content: content, updated_on: new Date()}, { returnDocument: 'after' })
+    Post.findOneAndUpdate({_id: id}, {title: title, content: content, tags: tags, updated_on: new Date()}, { returnDocument: 'after' })
         .then(data => {
             if (data) {
                 return res.send({message: "Edited!"})
@@ -65,3 +73,15 @@ exports.deletePost = (req, res) => {
         })
         .then(() => deletePostComments(id))
 }
+
+exports.getAllTags = (req, res) => (
+    Post.find().distinct("tags")
+        .then(data => res.send(data))
+)
+
+exports.searchPosts = (req, res) => {
+    Post.find({ $text: { $search: req.params.searchedText } }).select('-__v')
+        .then(data => res.send(data))
+}
+
+
