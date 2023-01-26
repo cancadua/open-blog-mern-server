@@ -2,13 +2,13 @@ const {deletePostComments} = require("./comments");
 const Post = require ('../models').post;
 
 exports.getAllPosts = (req, res) => {
-    Post.find().select('-__v')
+    Post.find().sort({updated_on: 'desc'}).select('-__v')
         .then(data => res.send(data))
 }
 
 exports.getPostsByTag = (req, res) => {
     const tag = req.params.tag;
-    Post.find({ "tags" : tag }).select('-__v')
+    Post.find({ "tags" : tag }).sort({updated_on: 'desc'}).select('-__v')
         .then(data => res.send(data))
 }
 
@@ -38,7 +38,7 @@ exports.postPost = (req, res) => {
     });
     post.save(post)
         .then(() => res.status(200).send({message: "Created!"}))
-        .catch(e => res.status(400).send())
+        .catch(e => res.status(400).send(e))
 };
 
 exports.putPost = (req, res) => {
@@ -75,12 +75,12 @@ exports.deletePost = (req, res) => {
 }
 
 exports.getAllTags = (req, res) => (
-    Post.find().distinct("tags")
+    Post.find().sort({updated_on: 'desc'}).distinct("tags")
         .then(data => res.send(data))
 )
 
 exports.searchPosts = (req, res) => {
-    Post.find({ $text: { $search: req.params.searchedText } }).select('-__v')
+    Post.find({ $text: { $search: req.params.searchedText } }).sort({updated_on: 'desc'}).select('-__v')
         .then(data => res.send(data))
 }
 

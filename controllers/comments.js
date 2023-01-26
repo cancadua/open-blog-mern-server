@@ -2,7 +2,7 @@ const Comment = require ('../models').comment;
 
 
 exports.getComments = (req, res) => {
-    Comment.find({ post_id: req.params.postId })
+    Comment.find({ post_id: req.params.postId }).sort({updated_on: 'desc'}).select('-__v')
         .then(data => res.send(data))
 }
 
@@ -15,6 +15,7 @@ exports.postComment = (req, res) => {
 
     comment.save(comment)
         .then(() => res.status(201).send({message: "Created!"}))
+        .catch(e => res.status(400).send(e))
 };
 
 

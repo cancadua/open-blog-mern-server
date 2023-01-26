@@ -10,10 +10,10 @@ module.exports = app => {
     router.get("/posts/tags", posts.getAllTags);
     router.get("/posts/tags/:tag", posts.getPostsByTag);
     router.get("/posts/:postId", posts.getPost);
+    router.get("/posts/search/:searchedText", posts.searchPosts);
     router.post("/posts", posts.postPost);
     router.put("/posts/:postId", posts.putPost);
     router.delete("/posts/:postId", posts.deletePost);
-    router.get("/posts/search/:searchedText", posts.searchPosts);
     
 
     router.get('/posts/:postId/comments', comments.getComments);
